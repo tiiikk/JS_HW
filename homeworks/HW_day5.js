@@ -17,34 +17,146 @@
 let color_balls = ['r', 'g', 'b', 'w', 'y'];
 
 let field = [
+    ['*', 'r', '*', '*', '*', '*', '*', '*', '*'],
+    ['*', '*', '*', '*', '*', 'g', 'r', 'g', '*'],
     ['*', '*', '*', '*', '*', '*', '*', '*', '*'],
-    ['*', '*', '*', '*', '*', '*', '*', '*', '*'],
-    ['*', '*', '*', '*', '*', '*', '*', '*', '*'],
-    ['*', '*', '*', '*', '*', '*', '*', '*', '*'],
+    ['*', '*', '*', '*', 'b', '*', '*', '*', '*'],
     ['*', '*', '*', '*', '*', '*', '*', '*', '*']
 ];
 
-function add_random() {
-    for (let i = 0; i < 3; i++) {
-        let randomColumnIndex = Math.trunc(Math.random() * 9);
-        let randomRowIndex = Math.trunc(Math.random() * 5);
-        let randomColorBall = Math.trunc(Math.random() * 5);
+// function add_random() {
+//     for (let i = 0; i < 3; i++) {
+//         let randomColumnIndex = Math.trunc(Math.random() * 9);
+//         let randomRowIndex = Math.trunc(Math.random() * 5);
+//         let randomColorBall = Math.trunc(Math.random() * 5);
+//
+//         while (field[randomRowIndex][randomColumnIndex] !== '*') {
+//             randomColumnIndex = Math.trunc(Math.random() * 9);
+//             randomRowIndex = Math.trunc(Math.random() * 5);
+//         }
+//
+//         field[randomRowIndex][randomColumnIndex] = color_balls[randomColorBall];
+//
+//     }
+// }
+// add_random()
+//
+// console.log(field)
 
-        while (field[randomRowIndex][randomColumnIndex] !== '*') {
-            randomColumnIndex = Math.trunc(Math.random() * 9);
-            randomRowIndex = Math.trunc(Math.random() * 5);
-        }
 
-        field[randomRowIndex][randomColumnIndex] = color_balls[randomColorBall];
+function checkSelectedBall (aCol, aRow) {
+    if (field[aCol][aRow] === '*'){
+        return 'The selected field is not a color ball!'
     }
-    return field
+    return true
 }
-let startField = add_random();
-console.log(startField)
+let checkBall = checkSelectedBall(1,1);
+
+function checkDestinationCoordinates (bCol, bRow){
+    if (field[bCol][bRow] === '*'){
+        return true
+    }
+    return 'The box is occupied'
+}
+
+let checkDestination = checkDestinationCoordinates(0,1)
 
 
 
 
+function checkUp (currentCol, currentRow){
+    if (field[currentCol -1][currentRow] === '*'){
+        return true;
+    }else{
+        directionChangerForUP_Down(currentCol, currentRow)
+    }
+    return false;
+}
+function checkDown (currentCol, currentRow){
+    if (field[currentCol + 1][currentRow] === '*'){
+        return true;
+    }
+    return false;
+}
 
+function checkRight (currentCol, currentRow){
+    if (field[currentCol][currentRow + 1] === '*'){
+        return true;
+    }
+    return false;
+}
+
+function checkLeft (currentCol, currentRow){
+    if (field[currentCol][currentRow - 1] === '*'){
+        return true;
+    }
+    return false;
+}
+
+function moveUp (aCol, aRow){
+    if(checkUp(aCol,aRow)){
+        field[aCol - 1][aRow] = field[aCol][aRow];
+        field[aCol][aRow] = '*';
+        return true
+
+    }
+    return false
+}
+
+function moveDown (aCol, aRow){
+    if(checkDown(aCol,aRow)){
+        console.log(true)
+        field[aCol + 1][aRow] = field[aCol][aRow];
+        field[aCol][aRow] = '*';
+        return field
+
+    }
+    return false
+}
+
+function moveLeft (aCol, aRow){
+    if(checkLeft(aCol,aRow)){
+        console.log(true)
+        field[aCol][aRow - 1] = field[aCol][aRow];
+        field[aCol][aRow] = '*';
+        return field
+
+    }
+    return false
+}
+
+
+
+function moveRight (aCol, aRow){
+    if(checkRight(aCol,aRow)){
+        console.log(true)
+        field[aCol][aRow +1] = field[aCol][aRow];
+        field[aCol][aRow] = '*';
+        return field
+
+    }
+    return false
+}
+
+function directionChangerForUP_Down (currCol, currRow){
+    if (checkLeft(currCol, currRow)){
+        moveLeft(currCol, currRow)
+    }else if(checkRight(currCol,currRow)){
+        moveRight(currCol, currRow)
+    }
+}
+function userMove (aCol, aRow, bCol, bRow){
+    if (checkSelectedBall(aCol,aRow) && checkDestinationCoordinates(bCol,bRow)){
+        if (aCol - bCol > 0){
+            while (!(color_balls.includes(field[bCol][bRow]))){
+                moveUp(aCol, aRow)
+                aCol--
+            }
+        }return field
+    }
+
+}
+
+console.log(userMove(3,4,0,4))
 
 

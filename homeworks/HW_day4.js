@@ -84,16 +84,16 @@ function Queue(value){
 
 let elem = new Queue(1);
 
-elem.enqueue(2)
-elem.enqueue(3)
-elem.printQueue()
-elem.first()
-elem.size()
-
-elem.dequeue()
-elem.dequeue()
-elem.dequeue()
-elem.isEmpty()
+// elem.enqueue(2)
+// elem.enqueue(3)
+// elem.printQueue()
+// elem.first()
+// elem.size()
+//
+// elem.dequeue()
+// elem.dequeue()
+// elem.dequeue()
+// elem.isEmpty()
 
 
 // Priority queue is a collection of prioritized elements that allows arbitrary element insertion,
@@ -111,4 +111,97 @@ elem.isEmpty()
 // size( ): Returns the number of entries in the priority queue.
 
 
+function PNode (key, value) {
+    this.key = key;
+    this.value = value;
+    this.next = undefined;
+    this.previous = undefined;
+
+}
+function PriorityQueue(key, value) {
+    this.keyValue = new PNode(key, value);
+    this.head = this.keyValue;
+    this.tail = this.keyValue;
+    this.length = 1;
+
+
+    this.insert = function (key,value){
+        let newValue = new PNode(key,value);
+        newValue.next = this.head;
+        this.head.previous = newValue;
+        this.head = newValue;
+        this.length += 1;
+    };
+
+    this.min = function() {
+        if (this.length === 1) {
+            console.log(this.head.key, this.head.value);
+        } else if (this.length > 1) {
+            let iterator = this.head;
+            let iteratorPlusOne = iterator.next;
+            while (iteratorPlusOne) {
+                if (iterator.key > iteratorPlusOne.key) {
+                    iterator = iteratorPlusOne;
+                }
+                iteratorPlusOne = iteratorPlusOne.next;
+            }
+            console.log(iterator.key, iterator.value);
+        }else{
+            console.log(null)
+        }
+    };
+
+    this.removeMin = function() {
+        if (this.length === 1) {
+            this.head = null;
+            this.tail = null;
+        } else if (this.length > 1) {
+            let iterator = this.head;
+            let iteratorPlusOne = iterator.next;
+            let previousNode = null;
+
+            while (iteratorPlusOne) {
+                if (iterator.key > iteratorPlusOne.key) {
+                    previousNode = iterator;
+                    iterator = iteratorPlusOne;
+                }
+                iteratorPlusOne = iteratorPlusOne.next;
+            }
+
+            if (previousNode) {
+                previousNode.next = iterator.next;
+                if (iterator === this.tail) {
+                    this.tail = previousNode;
+                }
+            } else {
+                this.head = iterator.next;
+                if (iterator === this.tail) {
+                    this.tail = null;
+                }
+            }
+        }
+
+        this.length--;
+    };
+
+
+    this.printQueue = function (){
+            let iterator = this.head
+            while (iterator){
+                console.log(iterator.value,iterator.key);
+                iterator = iterator.next;
+            }
+    };
+
+    this.size = function (){
+        console.log(this.length)
+    }
+
+}
+let priorityElem = new PriorityQueue(1,1);
+
+priorityElem.insert(20,2)
+priorityElem.size()
+priorityElem.removeMin()
+priorityElem.printQueue()
 
